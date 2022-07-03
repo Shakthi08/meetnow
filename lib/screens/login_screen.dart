@@ -1,8 +1,11 @@
-// ignore_for_file: unnecessary_const, prefer_const_literals_to_create_immutables
+// ignore_for_file: unnecessary_const, prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:meetnow/resources/auth_methods.dart';
+
+import '../widgets/custom_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -12,6 +15,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final AuthMethods _authMethods = AuthMethods();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,13 +27,18 @@ class _LoginScreenState extends State<LoginScreen> {
           'Start or join a meeting',
           style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        Image.asset('assets/images/onboarding.jpg'),
-        FlatButton(
-            onPressed: () {},
-            child: Text(
-              'Join a meeting',
-              style: TextStyle(fontSize: 20.0),
-            ))
+        Padding(
+            padding: EdgeInsets.symmetric(vertical: 40.0),
+            child: Image.asset('assets/images/onboarding.jpg')),
+        CustomButton(
+          text: 'Sign in',
+          onPressed: () async {
+            bool res = await _authMethods.signinWithGoogle(context);
+            if (res) {
+              Navigator.pushNamed(context, '/home');
+            }
+          },
+        ),
       ],
     ));
   }
